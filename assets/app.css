@@ -1,0 +1,284 @@
+/* Site des propals Green Cube (V1) : l'interface autour des slides.
+   Les slides gardent leur feuille (propal-nouvelle-charte.css depuis le 04/11/2026) ; ce fichier ne touche qu'à l'habillage,
+   à l'édition et à l'impression. */
+:root{
+  --noir:#010506; --pap:#f1f1ea; --cit:#b4c946; --oli:#798d1a; --encre:#1d2a28; --gris:#56625f;
+  --table:#d6d8cc;      /* fond de travail : les slides posées comme des feuilles */
+  --ligne:#c4c7ba; --blanc:#fff; --alerte:#a3361f;
+  --k:.6;               /* échelle des slides, recalculée par app.js */
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--table);font-family:"Montserrat",system-ui,sans-serif;font-size:14px;line-height:1.45;color:var(--encre)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--oli);outline-offset:2px}
+
+/* ---------- barre du haut ---------- */
+.barre{position:sticky;top:0;z-index:30;height:60px;display:flex;align-items:center;gap:28px;padding:0 20px;background:var(--noir);color:var(--pap)}
+.barre-marque{display:flex;align-items:center;gap:14px;min-width:0}
+.barre-logo{height:30px;width:auto;display:block}
+.barre-titre{font-family:"Sofia Sans Condensed";font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fa69c;white-space:nowrap}
+.onglets{display:flex;gap:4px}
+.onglets button{background:none;border:0;border-bottom:2px solid transparent;color:#9fa69c;padding:18px 10px 16px;cursor:pointer;font-family:"Sofia Sans Condensed";font-weight:700;font-size:16px;letter-spacing:.04em}
+.onglets button[aria-selected="true"]{color:var(--pap);border-bottom-color:var(--cit)}
+.onglets button:hover{color:var(--pap)}
+.barre-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.etat{font-size:12px;color:#9fa69c;white-space:nowrap}
+.btn{border:1.5px solid currentColor;background:none;border-radius:18px;padding:7px 16px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap}
+.barre .btn{color:var(--pap)}
+.btn:hover{background:rgba(241,241,234,.08)}
+.btn-cit{background:var(--cit);border-color:var(--cit);color:var(--noir)!important}
+.btn-cit:hover{background:#c3d65a}
+.btn-noir{background:var(--noir);border-color:var(--noir);color:var(--pap)}
+.btn-noir:hover{background:#1d2a28}
+.btn-lien{border:0;padding:0;background:none;color:var(--oli);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-weight:600}
+.btn-petit{padding:4px 12px;font-size:12px}
+
+/* ---------- vues ---------- */
+.vue{display:none}
+.vue.active{display:block}
+#vue-propal.active{display:grid;grid-template-columns:372px minmax(0,1fr);height:calc(100vh - 60px)}
+
+/* ---------- panneau de gauche ---------- */
+.panneau{overflow:auto;background:var(--pap);border-right:1px solid var(--ligne);padding:4px 22px 80px}
+.bloc{padding:20px 0 22px;border-bottom:1px solid var(--ligne)}
+.bloc:last-child{border-bottom:0}
+.bloc h2{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;font-family:"Sofia Sans Condensed Black";font-weight:400;font-size:21px;line-height:1;text-transform:uppercase;color:var(--noir)}
+.bloc h2 .no{font-family:"Sofia Sans Condensed Light";font-size:22px;color:var(--oli)}
+.aide{margin:-4px 0 12px;font-size:12.5px;color:var(--gris)}
+.champ-form{display:block;margin:0 0 10px}
+.champ-form span{display:block;font-family:"Sofia Sans Condensed";font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin-bottom:2px}
+.champ-form input{width:100%;border:0;border-bottom:1.5px solid #9fa69c;background:transparent;padding:5px 0 6px;font-size:14px;border-radius:0}
+.champ-form input:focus{outline:none;border-bottom-color:var(--noir)}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.choix{display:flex;gap:10px;align-items:flex-start;margin:0 0 8px;cursor:pointer}
+.choix input{margin:2px 0 0;accent-color:var(--noir);width:16px;height:16px;flex:none}
+.choix b{font-weight:600}
+.module{margin:0 0 14px}
+.module>.choix{font-size:15px}
+.sous{margin:4px 0 0 26px;padding-left:12px;border-left:2px solid var(--cit)}
+.sous .choix{font-size:13px;margin-bottom:5px}
+.ligne-choix{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.ligne-choix .choix{min-width:0}
+.aller-pages{flex:none;border:0;padding:0;background:none;color:var(--oli);font-size:12px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;white-space:nowrap}
+.module.off .aller-pages{display:none}
+.sous .num-part{display:inline-block;min-width:28px;font-family:"Sofia Sans Condensed";font-weight:700;color:var(--oli)}
+.module.off .sous{opacity:.45;pointer-events:none}
+.famille{margin:0 0 6px}
+.famille summary{cursor:pointer;font-size:14px;font-weight:600;padding:3px 0}
+.famille .ligne-choix{margin-left:12px;padding-left:12px;border-left:2px solid var(--cit)}
+.famille .choix{font-size:13px;margin-bottom:5px}
+.famille-nb{display:inline-block;margin-left:8px;min-width:18px;padding:0 5px;border-radius:9px;background:var(--cit);color:var(--noir);font-size:11.5px;font-weight:700;line-height:18px;text-align:center}
+.chiffres{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0 0 10px;font-size:13.5px}
+.chiffres dt{color:var(--gris)}
+.chiffres dd{margin:0;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.chiffres .eco{font-family:"Sofia Sans Condensed Black";font-size:22px;color:var(--noir)}
+.note-alerte{font-size:12.5px;color:var(--alerte);margin:6px 0 0}
+#p-pages h3{margin:12px 0 4px;font-family:"Sofia Sans Condensed";font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+#p-ordre{margin:0 0 6px}
+.ligne-page{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:2px 0;cursor:grab}
+.ligne-page input{accent-color:var(--noir);margin:0}
+.ligne-page button{background:none;border:0;padding:0;text-align:left;cursor:pointer;color:var(--encre);font-size:12.5px}
+.ligne-page button:hover{text-decoration:underline}
+.ligne-page .n{font-variant-numeric:tabular-nums;color:var(--gris);min-width:20px;text-align:right}
+.ligne-page .aller{flex:1;min-width:0}
+.ligne-page.retiree .aller{color:#8d948a;text-decoration:line-through}
+.ligne-page .deplacer{display:flex;gap:2px;flex:none}
+.ligne-page .deplacer button{width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-size:13px;color:var(--gris)}
+.ligne-page .deplacer button:hover:not(:disabled){background:var(--blanc);color:var(--noir);text-decoration:none}
+.ligne-page .deplacer button:disabled{opacity:.25;cursor:default}
+.ligne-page.glisse{opacity:.4}
+.ligne-page.cible-avant{box-shadow:0 -2px 0 var(--oli)}
+.ligne-page.cible-apres{box-shadow:0 2px 0 var(--oli)}
+/* bloc « Le matériel proposé » */
+.champ-form select{width:100%;border:0;border-bottom:1.5px solid #9fa69c;background:transparent;padding:5px 0 6px;font-size:14px;border-radius:0;cursor:pointer}
+.champ-form select:focus{outline:none;border-bottom-color:var(--noir)}
+.bundle-choix{margin-top:10px}
+.bundle-resume{margin:10px 0 12px;font-size:13px;font-weight:600;color:var(--encre)}
+.bundle-resume .aller-pages{margin-left:4px}
+.ligne-bundle{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:28px;margin-left:12px;padding-left:12px;border-left:2px solid var(--cit)}
+.ligne-bundle .choix{min-width:0;margin:0;font-size:13px}
+.qte-champ{display:flex;align-items:center;gap:6px;flex:none;font-size:11.5px;color:var(--gris)}
+.qte{width:58px;border:0;border-bottom:1.5px solid #9fa69c;background:transparent;padding:2px 0 3px;text-align:right;font-variant-numeric:tabular-nums;font-size:13.5px;font-weight:600;border-radius:0}
+.qte:focus{outline:none;border-bottom-color:var(--noir)}
+.autre-nom{flex:1;min-width:0;font-size:13px;padding:3px 0}
+.autre-nom small{display:block;color:var(--gris);font-size:11.5px;line-height:1.3}
+.ligne-bundle .btn-lien{flex:none;font-size:12px}
+.autre-form{margin:6px 0 4px 12px;padding:8px 0 0 12px;border-left:2px solid var(--cit)}
+.autre-form .aide{margin:0 0 8px}
+.autre-bas{display:flex;align-items:flex-end;gap:14px}
+.autre-bas .champ-form{width:90px;margin:0}
+.bundle-sauver{display:flex;align-items:flex-end;gap:10px;margin:18px 0 8px;padding-top:14px;border-top:1px dashed var(--ligne)}
+.bundle-sauver .champ-form{flex:1;margin:0}
+.verif{list-style:none;margin:0 0 12px;padding:0}
+.verif li{position:relative;padding:3px 0 3px 22px;font-size:13px}
+.verif li::before{content:"";position:absolute;left:2px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--cit)}
+.verif li.ko::before{background:var(--alerte)}
+.verif li button{font-size:12.5px}
+
+/* ---------- les slides ---------- */
+.planches{overflow:auto;padding:28px 32px 120px}
+.vide-propal{max-width:560px;margin:60px auto;text-align:center;color:var(--gris)}
+.page{width:calc(1280px * var(--k));margin:0 auto 34px}
+.page.hors{display:none}
+.page-tete{display:flex;align-items:center;gap:12px;margin:0 0 8px;font-size:12.5px;color:var(--gris)}
+.page-no{font-family:"Sofia Sans Condensed Black";font-size:18px;color:var(--noir);min-width:24px}
+.page-nom{font-weight:600;color:var(--encre);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.page-partie{flex:none;color:var(--gris);white-space:nowrap}
+.page-marque{display:none;flex:none;background:var(--cit);color:var(--noir);font-weight:700;font-size:12px;padding:2px 10px;border-radius:10px}
+.page.ajoutee .page-marque{display:inline-block}
+.page.ajoutee .cadre-slide{outline:5px solid var(--cit);outline-offset:6px;animation:arrivee .7s ease-out}
+@keyframes arrivee{from{outline-offset:18px;outline-color:rgba(180,201,70,0)}}
+.page-deplacer{margin-left:auto;display:flex;gap:6px;flex:none}
+.btn-page{border:1px solid #b6baad;background:transparent;border-radius:12px;padding:1px 10px;font-size:12px;font-weight:600;color:var(--encre);cursor:pointer}
+.btn-page:hover:not(:disabled){border-color:var(--noir);background:var(--pap)}
+.btn-page:disabled{opacity:.35;cursor:default}
+.page-garder{margin-left:8px;display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+.page-garder input{accent-color:var(--noir);margin:0}
+.cadre-slide{position:relative;width:calc(1280px * var(--k));height:calc(720px * var(--k));overflow:hidden;background:var(--pap);
+  box-shadow:0 1px 2px rgba(1,5,6,.12),0 14px 28px -18px rgba(1,5,6,.45)}
+.cadre-slide>.slide{position:absolute;left:0;top:0;margin:0;transform:scale(var(--k));transform-origin:0 0}
+.page.retiree .cadre-slide{opacity:.32;filter:grayscale(.6)}
+.page.retiree .page-nom::after{content:" · retirée du PDF";color:var(--alerte);font-weight:400}
+.page-note{margin:8px 0 0;font-size:12.5px;color:var(--gris)}
+.page-note summary{cursor:pointer;width:max-content}
+.page-note p{margin:6px 0 0;max-width:80ch;white-space:pre-line}
+
+/* fin de partie : ajouter la solution au comparatif (écran seulement) */
+.ajout{width:calc(1280px * var(--k));margin:-14px auto 44px;display:grid;grid-template-columns:minmax(0,1fr) 230px 130px;gap:10px 22px;align-items:end;padding:14px 18px 16px;background:var(--pap);border-left:4px solid var(--ligne)}
+.ajout.actif{background:var(--blanc);border-left-color:var(--cit)}
+.ajout.hors{display:none}
+.ajout-choix{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.ajout-choix input{margin:3px 0 0;accent-color:var(--noir);width:16px;height:16px;flex:none}
+.ajout-choix b{display:block;font-weight:600;color:var(--noir)}
+.ajout-fin{display:block;font-size:12.5px;color:var(--gris)}
+.ajout-champ span{display:block;font-family:"Sofia Sans Condensed";font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin-bottom:2px}
+.ajout-champ input{width:100%;border:0;border-bottom:1.5px solid #9fa69c;background:transparent;padding:5px 0 6px;font-size:14px;border-radius:0}
+.ajout-champ input:focus{outline:none;border-bottom-color:var(--noir)}
+.ajout-prix input{text-align:right;font-variant-numeric:tabular-nums}
+
+/* zones modifiables, à l'écran seulement */
+.slide .champ{outline:none;border-radius:2px;cursor:text;transition:box-shadow .12s}
+.slide .champ:hover{box-shadow:0 0 0 2px rgba(121,141,26,.45)}
+.slide .champ:focus{box-shadow:0 0 0 2px var(--oli);background:rgba(255,255,255,.4)}
+/* Une zone remplie prend la couleur du texte qui l'entoure (dans un tableau : celle de la case, claire sur un aplat noir). */
+.slide .champ.rempli{color:inherit!important}
+.slide .champ.auto{text-decoration:underline dotted;text-decoration-color:rgba(121,141,26,.85);text-underline-offset:4px}
+.slide .cb{cursor:pointer}
+.slide .cb:hover{box-shadow:0 0 0 3px rgba(121,141,26,.35)}
+/* La croix d'une case cochée : seulement l'image de fond, pour garder le fond blanc des cases sur le papier. */
+.slide .cb.coche{--x:var(--noir);background-image:
+  linear-gradient(45deg,transparent calc(50% - 1.3px),var(--x) calc(50% - 1.3px),var(--x) calc(50% + 1.3px),transparent calc(50% + 1.3px)),
+  linear-gradient(-45deg,transparent calc(50% - 1.3px),var(--x) calc(50% - 1.3px),var(--x) calc(50% + 1.3px),transparent calc(50% + 1.3px))}
+.slide .fd .cb.coche,.slide.fd .cb.coche{--x:var(--cit)}
+.slide .fd .ap-cit .cb.coche,.slide .ap-cit .cb.coche,.slide .ap-blanc .cb.coche{--x:var(--noir)}
+.slide [data-image]{cursor:pointer}
+.slide [data-image]:hover{box-shadow:0 0 0 3px rgba(121,141,26,.45)}
+.slide [data-image].a-image{border-color:transparent!important;color:transparent!important;background:none!important}
+.slide [data-image]>img.img-ajoutee{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.slide .retirer-image{position:absolute;right:4px;top:4px;width:26px;height:26px;border-radius:50%;border:0;background:var(--noir);color:var(--pap);font-size:16px;line-height:26px;padding:0;cursor:pointer;display:none}
+.slide [data-image].a-image:hover .retirer-image{display:block}
+
+/* page « Matériel proposé » (bundle), en nouvelle charte : app.js choisit la mise en page selon le nombre de produits
+   (cartes jusqu'à 3, tableau jusqu'à 6, deux colonnes au-delà). Les photos sont dans un cadre blanc, comme sur les fiches. */
+.slide .mp-carte{display:flex;flex-direction:column;background:var(--blanc);border:1px solid #dcddd3;padding:9px;overflow:hidden}
+.slide .mp-carte.seule{flex-direction:row}
+.slide .mp-cadre{display:flex;align-items:center;justify-content:center;flex:none;background:var(--blanc);overflow:hidden}
+.slide .mp-ligne .mp-cadre,.slide .mp-ligne .mp-sans{border:1px solid #dcddd3;padding:4px}
+/* .mp-vue : la partie visible de la photo, cadrée sur le produit par cadrerPhoto (app.js) ; avant, la photo entière */
+.slide .mp-vue{flex:none;width:100%;height:100%;overflow:hidden}
+.slide .mp-photo{display:block;width:100%;height:100%;object-fit:contain}
+.slide .mp-photo.cadree{flex:none;max-width:none;max-height:none;object-fit:fill}
+.slide .mp-sans{display:flex;flex:none;align-items:center;justify-content:center;background:var(--cit)}
+.slide .mp-corps{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;padding:18px 16px 8px;overflow:hidden}
+.slide .mp-carte.seule .mp-corps{padding:30px 32px 22px 40px}
+.slide .mp-corps .T4{margin-top:6px}
+.slide .mp-modele{margin-top:6px;color:var(--encre)}
+.slide .mp-sert{margin-top:12px}
+.slide .mp-quoi{margin-top:28px}
+.slide .mp-quoi+.txt{margin-top:6px}
+.slide .mp-qte{display:flex;align-items:baseline;justify-content:space-between;margin-top:auto;padding-top:12px;border-top:2px solid var(--vp)}
+.slide .mp-qte .T4{line-height:.85}
+.slide .mp-tete{display:grid;column-gap:24px;align-items:end;padding-bottom:8px;border-bottom:2px solid var(--vp)}
+.slide .mp-ligne{display:grid;column-gap:24px;align-items:center;border-bottom:1.5px solid var(--fil);overflow:hidden}
+.slide .mp-tete.c,.slide .mp-ligne.c{column-gap:16px}
+.slide .mp-ligne .T5+.pt{margin-top:4px}
+.slide .mp-nom{min-width:0}
+.slide .mp-nom .lab{margin-bottom:3px}
+.slide .mp-droite{text-align:right}
+.slide .mp-marque-c{font-size:11px}
+.slide .mp-nom-c{font-family:"Montserrat ExtraBold";font-size:15px;line-height:1.25;color:var(--vp)}
+.slide .mp-sert-c{margin-top:2px;font-family:"Montserrat";font-size:12px;line-height:1.35;color:var(--gris)}
+.slide .mp-vide{display:flex;align-items:center;justify-content:center;padding:40px;border:2px dashed #9fa69c;text-align:center;font-family:"Montserrat";font-size:18px;line-height:1.5;color:var(--gris)}
+
+/* ---------- bibliothèque ---------- */
+#vue-bibliotheque{background:var(--pap);min-height:calc(100vh - 60px)}
+.biblio{max-width:1180px;margin:0 auto;padding:44px 32px 100px}
+.biblio-tete{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin:0 0 36px}
+.biblio-tete h1{margin:0;font-family:"Sofia Sans Condensed Black";font-weight:400;font-size:64px;line-height:.9;text-transform:uppercase;color:var(--noir)}
+.biblio-tete p{margin:0;max-width:52ch;color:var(--gris)}
+.biblio-tete .actions{margin-left:auto;display:flex;gap:10px}
+.rubrique{margin:0 0 48px}
+.rubrique-tete{display:flex;align-items:baseline;gap:16px;border-top:2px solid var(--noir);padding-top:12px;margin:0 0 14px}
+.rubrique-tete h2{margin:0;font-family:"Sofia Sans Condensed Black";font-weight:400;font-size:28px;line-height:1;text-transform:uppercase;color:var(--noir)}
+.rubrique-tete p{margin:0;color:var(--gris);font-size:13px}
+.rubrique-tete .droite{margin-left:auto}
+.liste{width:100%;border-collapse:collapse;font-size:13.5px}
+.liste th{text-align:left;font-family:"Sofia Sans Condensed ExtraBold";font-weight:400;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--noir);padding:8px 10px 8px 0;border-bottom:1.5px solid var(--noir)}
+.liste td{padding:9px 10px 9px 0;border-bottom:1px solid var(--ligne);vertical-align:top}
+.liste td.actions{white-space:nowrap;text-align:right}
+.liste td.actions>*{margin-left:12px}
+.liste .discret{color:var(--gris)}
+.vide{padding:18px 0;color:var(--gris)}
+.modeles{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.modele{position:relative;background:var(--blanc);padding:0 0 16px;border-bottom:2px solid var(--noir)}
+.modele img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.modele h3{margin:14px 16px 4px;font-family:"Sofia Sans Condensed ExtraBold";font-weight:400;font-size:20px;line-height:1.05;text-transform:uppercase}
+.modele p{margin:0 16px 10px;color:var(--gris);font-size:13px}
+.modele a{margin:0 16px;color:var(--oli);font-weight:600}
+.confidentiel{display:inline-block;background:var(--noir);color:var(--cit);font-family:"Sofia Sans Condensed";font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:12px}
+.filtre{border:0;border-bottom:1.5px solid #9fa69c;background:transparent;padding:5px 0;min-width:240px}
+.filtre:focus{outline:none;border-bottom-color:var(--noir)}
+
+/* ---------- message ---------- */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--noir);color:var(--pap);padding:11px 18px;border-radius:22px;font-size:13.5px;max-width:min(560px,calc(100vw - 32px));transition:opacity .2s,transform .2s;z-index:50}
+.toast.visible{opacity:1;transform:translate(-50%,0)}
+.toast.erreur{background:var(--alerte)}
+
+@media (max-width:900px){
+  .barre{gap:12px;padding:0 12px;overflow-x:auto}
+  .barre-titre,.etat{display:none}
+  #vue-propal.active{display:block;height:auto}
+  .panneau{border-right:0;border-bottom:1px solid var(--ligne)}
+  .planches{padding:20px 16px 80px}
+  .biblio{padding:28px 16px 80px}
+  .biblio-tete h1{font-size:44px}
+  .liste{display:block;overflow-x:auto}
+  .ajout{grid-template-columns:1fr;width:auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- impression : une slide par page, sans l'interface ---------- */
+/* (01) Votre situation, depuis le 12/11/2026 : le prestataire et le prix d’une ligne n’apparaissent que si sa case est cochée
+   (app.js met « actif » sur la ligne). Hors du site, la page garde toutes les lignes, comme un formulaire à remplir. */
+.slide .sit-l:not(.actif) .sit-pr,.slide .sit-l:not(.actif) .sit-px{display:none}
+.slide .sit-px:has(.champ:not(.rempli)) .sit-euro{visibility:hidden}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:none!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .barre,.panneau,.page-tete,.page-note,.toast,#vue-bibliotheque,.vide-propal,.ajout{display:none!important}
+  .cadre-slide{outline:none!important;animation:none!important}
+  #vue-propal{display:block!important;height:auto!important}
+  .planches{overflow:visible!important;padding:0!important}
+  .page{width:1280px!important;margin:0!important}
+  .page.retiree,.page.hors{display:none!important}
+  .cadre-slide{width:1280px!important;height:720px!important;box-shadow:none!important}
+  .cadre-slide>.slide{transform:none!important}
+  .page.derniere .slide{break-after:auto}
+  .slide .champ,.slide .cb,.slide [data-image]{box-shadow:none!important;text-decoration:none!important}
+  .slide .champ{background-color:transparent}
+  .slide .champ:not(.rempli),.slide .vide-impr,.slide [data-image]:not(.a-image),.slide .ecran-seul{visibility:hidden!important}
+  .slide .retirer-image{display:none!important}
+}

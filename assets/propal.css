@@ -1,0 +1,115 @@
+/* Propositions commerciales Green Cube : système graphique commun.
+   Style « Media Kit » (titres de section numérotés, étiquette arrondie, aplats citron,
+   grandes photos, filets fins) avec les couleurs et les polices du catalogue.
+   Une slide = 1280 × 720 px = 13,333 × 7,5 pouces (format large de PowerPoint).
+
+   build.js convertit chaque slide en PowerPoint modifiable en lisant ces classes :
+     .t      bloc de texte (les <span> deviennent des segments, <br> un retour à la ligne)
+     .s      forme : fond, bordure et coins arrondis deviennent un rectangle
+     .s.t    forme qui contient son texte (étiquette, case)
+     img     photo ou logo, exporté tel qu'il apparaît (recadrage compris)
+     table.tb  tableau PowerPoint modifiable
+     .num    numéro de slide automatique
+     aside.notes  notes pour le commercial
+   Les noms de police sont ceux que PowerPoint affiche une fois les polices installées. */
+
+@font-face{font-family:"Sofia Sans Condensed Black";src:url(polices/SofiaSansCondensed-Black.ttf)}
+@font-face{font-family:"Sofia Sans Condensed ExtraBold";src:url(polices/SofiaSansCondensed-ExtraBold.ttf)}
+@font-face{font-family:"Sofia Sans Condensed Light";src:url(polices/SofiaSansCondensed-Light.ttf)}
+@font-face{font-family:"Sofia Sans Condensed";src:url(polices/SofiaSansCondensed-Regular.ttf);font-weight:400}
+@font-face{font-family:"Sofia Sans Condensed";src:url(polices/SofiaSansCondensed-Bold.ttf);font-weight:700}
+@font-face{font-family:"Montserrat";src:url(polices/Montserrat-Regular.ttf);font-weight:400}
+@font-face{font-family:"Montserrat";src:url(polices/Montserrat-Italic.ttf);font-weight:400;font-style:italic}
+@font-face{font-family:"Montserrat";src:url(polices/Montserrat-Bold.ttf);font-weight:700}
+@font-face{font-family:"Montserrat Medium";src:url(polices/Montserrat-Medium.ttf)}
+@font-face{font-family:"Montserrat SemiBold";src:url(polices/Montserrat-SemiBold.ttf)}
+@font-face{font-family:"Montserrat ExtraBold";src:url(polices/Montserrat-ExtraBold.ttf)}
+
+:root{
+  --noir:#010506; --vp:#0e2725; --ard:#143133; --cit:#b4c946; --oli:#798d1a; --pap:#f1f1ea; --blanc:#ffffff;
+  --tx:#d9dcd3; --tx2:#9fa69c;                 /* textes sur fond sombre */
+  --encre:#1d2a28; --gris:#56625f;             /* textes sur fond papier */
+  --fil-c:#cfd0c5; --fil-s:#34433f;            /* filets sur papier / sur sombre */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:1280px 720px;margin:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#5b605f;font-family:"Montserrat";text-rendering:geometricPrecision;font-kerning:normal}
+img{display:block}
+.slide{position:relative;width:1280px;height:720px;overflow:hidden;background:var(--pap);margin:0 auto 24px;break-after:page}
+@media print{body{background:none}.slide{margin:0}}
+.ab{position:absolute}
+aside.notes{display:none}
+
+/* ---------- fonds ---------- */
+.slide.noir,.ap-noir{background:var(--noir)}
+.slide.vp,.ap-vp{background:var(--vp)}
+.slide.cit,.ap-cit{background:var(--cit)}
+.ap-pap{background:var(--pap)} .ap-blanc{background:var(--blanc)}
+
+/* ---------- typographie (fond papier par défaut) ---------- */
+.titre{font-family:"Sofia Sans Condensed Black";font-size:60px;line-height:.92;text-transform:uppercase;color:var(--noir);white-space:nowrap}
+.titre .sn{font-family:"Sofia Sans Condensed Light"}          /* (2.1) */
+.geant{font-family:"Sofia Sans Condensed Black";font-size:150px;line-height:.86;text-transform:uppercase;color:var(--pap)}
+.gros{font-family:"Sofia Sans Condensed Black";font-size:44px;line-height:.95;text-transform:uppercase;color:var(--noir)}
+.T3{font-family:"Sofia Sans Condensed ExtraBold";font-size:22px;line-height:1.05;letter-spacing:.02em;text-transform:uppercase;color:var(--noir)}
+.lab{font-family:"Sofia Sans Condensed ExtraBold";font-size:14px;line-height:1.15;letter-spacing:.1em;text-transform:uppercase;color:var(--oli)}
+.chapo{font-family:"Montserrat ExtraBold";font-size:19px;line-height:1.35;color:var(--noir)}
+.txt{font-family:"Montserrat";font-size:17px;line-height:1.45;color:var(--encre)}
+.intro{font-family:"Montserrat";font-size:15px;line-height:1.45;color:var(--gris)}
+.pt{font-family:"Montserrat";font-size:15px;line-height:1.4;color:var(--gris)}
+.big{font-family:"Sofia Sans Condensed Black";font-size:76px;line-height:.9;color:var(--noir)}
+.big .u{font-size:40px}
+.n{font-family:"Sofia Sans Condensed Light";font-size:40px;line-height:.9;color:var(--noir)}
+.cite{font-family:"Montserrat";font-style:italic;font-size:19px;line-height:1.45;color:var(--noir)}
+.champ{color:var(--oli)}                         /* texte à remplir, entre crochets */
+.pill{font-family:"Sofia Sans Condensed";font-weight:700;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--noir);
+  border:1.5px solid var(--noir);border-radius:14px;padding:6px 14px 5px;white-space:nowrap}
+.pied{position:absolute;left:56px;bottom:22px;font-family:"Sofia Sans Condensed";font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gris)}
+.num{position:absolute;right:56px;bottom:22px;width:60px;text-align:right;font-family:"Sofia Sans Condensed";font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--gris)}
+.fil{height:1.5px;background:var(--fil-c)}
+.fil.fort{height:2px;background:var(--noir)}
+.cb{width:18px;height:18px;border:2px solid var(--noir);flex:none}
+.cadre{border:2px solid var(--noir)}
+.ph{object-fit:cover}
+
+/* ---------- fond sombre (slide ou panneau) ---------- */
+.fbg .titre,.fbg .gros,.fbg .T3,.fbg .chapo,.fbg .big,.fbg .n,.fbg .cite,.fbg .geant{color:var(--pap)}
+.fbg .lab,.fbg .champ{color:var(--cit)}
+.fbg .txt{color:var(--tx)} .fbg .intro,.fbg .pt,.fbg .pied,.fbg .num{color:var(--tx2)}
+.fbg .pill{color:var(--pap);border-color:var(--pap)}
+.fbg .fil{background:var(--fil-s)} .fbg .fil.fort{background:var(--cit)}
+.fbg .cb{border-color:var(--cit)}
+
+/* ---------- fond citron (slide ou panneau) ---------- */
+.cbg .titre,.cbg .gros,.cbg .T3,.cbg .chapo,.cbg .big,.cbg .n,.cbg .cite,.cbg .txt,.cbg .lab,.cbg .champ{color:var(--noir)}
+.cbg .intro,.cbg .pt,.cbg .pied,.cbg .num{color:#2c3417}
+.cbg .pill{color:var(--noir);border-color:var(--noir)}
+.cbg .fil{background:#8f9c3a} .cbg .fil.fort{background:var(--noir)}
+.cbg .cb{border-color:var(--noir)}
+
+/* ---------- carte papier ou blanche posée sur un fond sombre ou citron ---------- */
+.pbg .titre,.pbg .gros,.pbg .T3,.pbg .chapo,.pbg .big,.pbg .n,.pbg .cite{color:var(--noir)}
+.pbg .txt{color:var(--encre)} .pbg .intro,.pbg .pt{color:var(--gris)}
+.pbg .lab,.pbg .champ{color:var(--oli)}
+.pbg .fil{background:var(--fil-c)} .pbg .fil.fort{background:var(--noir)}
+.pbg .cb{border-color:var(--noir)}
+
+/* ---------- tableaux modifiables ---------- */
+table.tb{border-collapse:collapse;font-family:"Montserrat";font-size:15px;color:var(--encre)}
+table.tb th{font-family:"Sofia Sans Condensed ExtraBold";font-weight:400;font-size:14px;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:2px solid var(--noir);color:var(--noir)}
+table.tb td{padding:8px 10px;border-bottom:1px solid var(--fil-c);line-height:1.25}
+table.tb .r{text-align:right}
+table.tb tr.tot td{font-family:"Montserrat ExtraBold";border-bottom:none;border-top:2px solid var(--noir);color:var(--noir)}
+table.tb td.champ{color:var(--oli)}
+.fbg table.tb{color:var(--tx)}
+.fbg table.tb th{color:var(--pap);border-bottom-color:var(--cit)}
+.fbg table.tb td{border-bottom-color:var(--fil-s)}
+.fbg table.tb tr.tot td{border-top-color:var(--cit);color:var(--pap)}
+.fbg table.tb td.champ{color:var(--cit)}
+table.tb.compact{font-size:14px} table.tb.compact th{font-size:13px;padding:7px 10px} table.tb.compact td{padding:7px 10px}
+/* ton « avant » : carte grise et terne (comparatif) */
+.ap-gris{background:#e2e3da}
+.ton-gris .lab,.ton-gris .T3,.ton-gris .big,.ton-gris .pt,.ton-gris .champ{color:#6d7672}
+.ton-gris table.tb th{color:#6d7672;border-bottom-color:#9ea49c}
+.ton-gris table.tb td,.ton-gris table.tb td.champ{color:#6d7672;border-bottom-color:#c8cac0}

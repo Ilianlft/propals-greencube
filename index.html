@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propals Green Cube</title>
+<link rel="stylesheet" href="assets/propal-nouvelle-charte.css">
+<link rel="stylesheet" href="assets/app.css">
+<script src="assets/acces.js"></script>
+<script src="data/slides.js"></script>
+<script src="data/anciennes-propals.js"></script>
+</head>
+<body>
+<header class="barre">
+  <div class="barre-marque">
+    <img class="barre-logo" src="img/courte/img/logo-greencube.png" alt="Green Cube Technologies">
+    <span class="barre-titre">Propositions commerciales</span>
+  </div>
+  <nav class="onglets" role="tablist" aria-label="Vues">
+    <button type="button" role="tab" data-vue="bibliotheque" aria-selected="false">Bibliothèque</button>
+    <button type="button" role="tab" data-vue="propal" aria-selected="false">Propal en cours</button>
+  </nav>
+  <div class="barre-actions">
+    <span class="etat" id="etat" aria-live="polite"></span>
+    <button type="button" class="btn" data-action="fichier">Enregistrer le fichier</button>
+    <button type="button" class="btn btn-cit" data-action="pdf">Télécharger le PDF</button>
+  </div>
+</header>
+<main>
+  <section id="vue-bibliotheque" class="vue" aria-label="Bibliothèque"></section>
+  <section id="vue-propal" class="vue" aria-label="Propal en cours">
+    <aside class="panneau" id="panneau"></aside>
+    <div class="planches" id="planches"></div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="choix-image" accept="image/png,image/jpeg,image/webp" hidden>
+<input type="file" id="choix-fichier" accept=".json,application/json" hidden>
+<script src="assets/pdf.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
